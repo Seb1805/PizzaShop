@@ -1,0 +1,44 @@
+﻿@page "/Pizza/AddPizza"
+
+@using PizzaShop.Models
+@using System.Threading.Tasks
+@using System.Net.Http.Json
+@inject HttpClient http
+
+<h3>Tilføj en Pizza</h3>
+
+<div>
+    <form @onsubmit="NewPizza">
+        <div class="mb-3">
+            <label for="pizzaName" class="form-label">pizza navn</label>
+            <input type="text" class="form-control" @bind="name" placeholder="Enter pizza name..." />
+            <div id="warning" class="form-text">DON'T EVER USE PINEAPPLE ON PIZZA!!</div>
+            
+            <hr />
+            <input type="checkbox" class="form-check-input" @bind="isItGlutenFree" id="isGlutenFree" />
+            <label for="isItGlutenFree" class="form-check-label">Is it gluten free?</label>
+            
+            <hr />
+
+            <input type="text" class="form-control" @bind="upload" />
+            <label for="upload" class="form-label">Upload et billede</label>
+
+        </div>
+            <button type="submit">Tilføj</button>
+    </form>
+
+</div>
+
+@code {
+    string? name;
+    bool isItGlutenFree;
+    string? upload;
+
+    private async Task NewPizza()
+    {
+        
+        var addPizza = new Pizza { Name = name, IsGlutenFree = isItGlutenFree, Image = upload};
+        await http.PostAsJsonAsync("https://localhost:7110/Pizza", addPizza);
+    }
+
+}

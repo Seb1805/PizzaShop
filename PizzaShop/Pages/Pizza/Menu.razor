@@ -1,0 +1,57 @@
+﻿@page "/Pizza/menu"
+@inject HttpClient http
+
+@using PizzaShop.Models
+
+<h3>Pizzas</h3>
+
+@if (pizzas == null)
+{
+    <p>No Pizzas Found</p>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nummer</th>
+                <th>Name</th>
+                <th>IsGlutenFree</th>
+                <th>Eat me</th>
+            </tr>
+        </thead>
+        <tbody>
+ 
+
+        @foreach (var pizza in pizzas)
+        {
+            <tr>
+            <td>Id: @pizza.Id</td>
+            <td>Name: @pizza.Name</td>
+            <td>@(pizza.IsGlutenFree ? "Gluten-free" : "May contain gluten" ) </td>            
+            <td>
+                <a href="@pizza.Image">
+                    <img src="@pizza.Image" alt="@pizza.Name" height=250 width=250/>
+                </a>
+             </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+
+}
+
+
+@code {
+    private static Pizza[]? pizzas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pizzas = await http.GetFromJsonAsync<Pizza[]>("https://localhost:7111/pizza");
+
+    }
+
+}
